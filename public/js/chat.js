@@ -15,6 +15,24 @@ msgerForm.addEventListener("submit", event => {
 
     /**TODO EL CODIGO DEL ENVIO**/
 
+    axios.post('/message/sent',{
+        message: msgText,
+        lobby_id: 5 // Pendiente a ser dinamico
+    }).then(data => {
+        console.log(data);
+
+        let res = data.data;
+
+        appendMessage(
+            res.user.name,
+            PERSON_IMG,
+            'right',
+            res.content,
+            formatDate(new Date(res.created_at))
+        );
+    })
+    .catch(err => console.log(err));
+
     msgerInput.value = "";
 
 });
@@ -28,7 +46,7 @@ function appendMessage(name, img, side, text, date) {
             <div class="msg-bubble">
                 <div class="msg-info">
                     <div class="msg-info-name">${name}</div>
-                    <div class="msg-info-time">${formatDate(new Date())}</div>
+                    <div class="msg-info-time">${date}</div>
                 </div>
 
                 <div class="msg-text">${text}</div>
