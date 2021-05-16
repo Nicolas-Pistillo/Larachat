@@ -9,6 +9,12 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
+        <!--ICONS-->
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+
+
         <!-- Styles -->
 
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -24,7 +30,7 @@
     </head>
     <body class="antialiased">
         <div>
-        <header class="bg-gray-800" x-data="{ isOpen: false }">
+        <header class="" x-data="{ isOpen: false }">
             <nav class="fixed top-0 container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
                 <div class="flex items-center justify-between">
                     <a class="text-xl font-bold text-white transition-colors duration-300 transform md:text-2xl hover:text-indigo-400"
@@ -65,8 +71,17 @@
                     <h2 class="m-2 text-3xl font-bold text-white md:text-5xl">Comienza a chatear con una nueva manera, <br> con Larachat</h2>
         
                     <div class="flex justify-center mt-8">
-                        <a class="px-8 py-2 text-lg font-medium text-white transition-colors duration-300 transform bg-indigo-600 rounded hover:bg-indigo-500"
-                            href="#">Comenzar</a>
+
+                        @auth
+                            <a class="px-8 py-2 text-lg flex items-center justify-center font-medium text-white transition-colors duration-300 transform bg-indigo-600 rounded hover:bg-indigo-500"
+                            href="{{ route('dashboard') }}"><i class="material-icons mr-1">
+                                assignment_return
+                                </i> {{auth()->user()->name}}</a>
+                        @else 
+                            <a class="px-8 py-2 text-lg font-medium text-white transition-colors duration-300 transform bg-indigo-600 rounded hover:bg-indigo-500"
+                            href="{{ route('register') }}">Comenzar</a>
+                        @endauth
+
                     </div>
                 </div>
             </section>
