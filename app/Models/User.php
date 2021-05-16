@@ -40,4 +40,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function lobbies() {
+        return $this->belongsToMany('App\Models\Lobby');
+    }
+
+    public function messages() {
+        return $this->hasMany('App\Models\Message');
+    }
+
 }
