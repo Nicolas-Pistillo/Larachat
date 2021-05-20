@@ -66,7 +66,7 @@
                 </div>
             </nav>
         
-            <section class="info-header flex items-center justify-center" style="height: 500px;">
+            <section class="info-header flex items-center justify-center" style="height: 550px;">
                 <div class="text-center">
                     <h2 class="m-2 text-3xl font-bold text-white md:text-5xl">Comienza a chatear con una nueva manera, <br> con Larachat</h2>
         
@@ -101,7 +101,7 @@
     
                 <div class="mt-8 md:mt-0 md:w-1/2">
                     <div class="flex items-center justify-center">
-                        <div class="max-w-md">
+                        <div class="max-w-md shadow-2xl">
                             <img class="object-cover object-center w-full rounded-md shadow" style="height: 500px;"
                                 src="https://images.unsplash.com/photo-1618346136472-090de27fe8b4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=673&q=80">
                         </div>
@@ -116,7 +116,7 @@
             <div class="items-center md:flex md:space-x-6">
                 <div class="md:w-1/2">
                     <div class="flex items-center justify-center">
-                        <div class="max-w-md">
+                        <div class="max-w-md shadow-2xl">
                             <img class="object-cover object-center w-full rounded-md shadow" style="height: 500px;"
                                 src="https://images.unsplash.com/photo-1616874535244-73aea5daadb9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80">
                         </div>
@@ -302,8 +302,8 @@
     
     <footer class="border-t">
         <div class="container flex items-center justify-between px-6 py-8 mx-auto">
-            <p class="text-gray-500">© 2019-2021 All Rights Reserved.</p>
-            <p class="font-medium text-gray-700">Terms of Service</p>
+            <p class="text-gray-500">© 2021 Todos los derechos reservados.</p>
+            <p class="font-medium text-gray-700">Larachat</p>
         </div>
     </footer>
 </div>

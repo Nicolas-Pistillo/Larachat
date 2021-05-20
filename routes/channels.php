@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('chat.{lobby_id}',function($user,$lobby_id) {
+    if ($user->lobbies->contains($lobby_id)) {
+        return $user;
+    }
+});

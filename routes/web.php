@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LobbyController;
+use App\Http\Controllers\MessageController;
+use Symfony\Component\Mime\MessageConverter;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +26,20 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/chat',[LobbyController::class,"show"])->name('lobby.show');
+Route::get('auth/user',function() {
+    if (auth()->check()) {
+        return response()->json([
+            'authUser' => auth()->user()
+        ]);
+    } else {
+        return null;
+    }
+});
+
+route::get('chat/{lobby}/getUsers',[LobbyController::class,"getUsers"])->name('lobby.getUsers');
+
+Route::get('chat/with/{user}',[LobbyController::class,"chatWith"])->name('lobby.with');
+
+Route::get('chat/{lobby}',[LobbyController::class,"show"])->name('lobby.show');
+
+Route::post('message/sent',[MessageController::class,"sent"])->name('message.sent');
