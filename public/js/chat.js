@@ -5,6 +5,26 @@ const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
 const CHAT_WITH = get('.chatWith');
 const TYPING = get('.typing');
 const CHAT_STATUS = get('.chatStatus');
+const LOBBY_ID = get('#id_chat').value;
+
+let authUser;
+let lobbyUsers;
+
+window.onload = function() {
+    axios.get('/auth/user')
+        .then(res => {
+            authUser = res.data.authUser;
+        });
+
+    axios.get(`/chat/${LOBBY_ID}/getUsers`)
+        .then(res => {
+            let results = res.data.users.filter(user => user.id != authUser.id);
+
+            if (results.length > 0) {
+                CHAT_WITH.innerHTML = results[0].name
+            }
+        });
+}
 
 msgerForm.addEventListener("submit", event => {
     event.preventDefault();
@@ -19,7 +39,6 @@ msgerForm.addEventListener("submit", event => {
         message: msgText,
         lobby_id: 5 // Pendiente a ser dinamico
     }).then(data => {
-        console.log(data);
 
         let res = data.data;
 
@@ -58,6 +77,20 @@ function appendMessage(name, img, side, text, date) {
     msgerChat.insertAdjacentHTML("beforeend", msgHTML);
     msgerChat.scrollTop += 500;
 }
+
+// LARAVEL ECHO
+
+Echo.join(`chat.${LOBBY_ID}`)
+.listen('MessageSent', data => {
+    data = data.message;
+    appendMessage(
+        data.user.name,
+        PERSON_IMG,
+        'left',
+        data.content,
+        formatDate(new Date(data.user.created_at))
+    );
+})
 
 // Utils
 function get(selector, root = document) {

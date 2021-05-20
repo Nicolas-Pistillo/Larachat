@@ -30,6 +30,8 @@
     				<button type="submit" class="msger-send-btn">Send</button>
     			</form>
      
+				<input type="hidden" name="chat_id" value="{{$chat->id}}" id="id_chat">
+
     		</section>
      
     		<script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>

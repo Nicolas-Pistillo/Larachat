@@ -39,4 +39,12 @@ class LobbyController extends Controller
         ]);
     }
 
+    public function getUsers(Lobby $lobby) {
+        $users = $lobby->users;
+
+        return response()->json([
+            'users' => $users
+        ]);
+    }
+
 }
