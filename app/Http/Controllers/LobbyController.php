@@ -47,4 +47,12 @@ class LobbyController extends Controller
         ]);
     }
 
+    public function getMessages(Lobby $lobby) {
+        $messages = $lobby->messages()->with('user')->get();
+
+        return response()->json([
+            'messages' => $messages
+        ]);
+    }
+
 }

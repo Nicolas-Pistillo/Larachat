@@ -10,6 +10,8 @@ const LOBBY_ID = get('#id_chat').value;
 let authUser;
 let lobbyUsers;
 
+let typingTimer = false;
+
 window.onload = function() {
     axios.get('/auth/user')
         .then(res => {
@@ -23,7 +25,13 @@ window.onload = function() {
             if (results.length > 0) {
                 CHAT_WITH.innerHTML = results[0].name
             }
-        });
+        })
+        .then(() => {
+            axios.get(`/chat/${LOBBY_ID}/getMessages`)
+            .then(res => {
+                appendMessages(res.data.messages);
+            })
+        })
 }
 
 msgerForm.addEventListener("submit", event => {
@@ -37,7 +45,7 @@ msgerForm.addEventListener("submit", event => {
 
     axios.post('/message/sent',{
         message: msgText,
-        lobby_id: 5 // Pendiente a ser dinamico
+        lobby_id: LOBBY_ID // Pendiente a ser dinamico
     }).then(data => {
 
         let res = data.data;
@@ -55,6 +63,22 @@ msgerForm.addEventListener("submit", event => {
     msgerInput.value = "";
 
 });
+
+function appendMessages(messages) {
+    let side = 'left';
+
+    messages.forEach(message=> {
+        side = (message.user.id === authUser.id) ? 'right' : 'left';
+
+        appendMessage(
+            message.user.name,
+            PERSON_IMG,
+            side,
+            message.content,
+            formatDate(new Date(message.created_at))
+        );
+    })
+}
 
 function appendMessage(name, img, side, text, date) {
   //   Simple solution for small apps
@@ -75,21 +99,63 @@ function appendMessage(name, img, side, text, date) {
     `;
 
     msgerChat.insertAdjacentHTML("beforeend", msgHTML);
-    msgerChat.scrollTop += 500;
+    scrollToBottom();
+}
+
+function scrollToBottom() {
+    msgerChat.scrollTop = msgerChat.scrollHeight;
+}
+
+function sendTypingEvent() {
+
+    typingTimer = true;
+
+    Echo.join(`chat.${LOBBY_ID}`)
+    .whisper('typing',msgerInput.value.length) // Registra evento typing dentro del canal 
 }
 
 // LARAVEL ECHO
 
 Echo.join(`chat.${LOBBY_ID}`)
-.listen('MessageSent', data => {
-    data = data.message;
+.listen('MessageSent', message => {
+    message = message.message;
     appendMessage(
-        data.user.name,
+        message.user.name,
         PERSON_IMG,
         'left',
-        data.content,
-        formatDate(new Date(data.user.created_at))
+        message.content,
+        formatDate(new Date(message.user.created_at))
     );
+})
+.here(users => { // Retorna las instancias de los usuarios activos en el canal
+    let result = users.filter(user => user.id !== authUser.id);
+    if (result.length > 0) {
+        CHAT_STATUS.className = 'chatStatus online';
+    }
+})
+.joining(user => { // Retorna el usuario que entra al canal
+    if (user.id !== authUser.id) {
+        CHAT_STATUS.className = 'chatStatus online';
+    }
+})
+.leaving(user => { // Retorna el usuario que abandona el canal
+    if (user.id !== authUser.id) {
+        CHAT_STATUS.className = 'chatStatus offline';
+    }
+})
+.listenForWhisper('typing',e => { // Escuchar el evento del whisper anteriormente realizado
+    if (e >= 4) {
+        TYPING.style.display = 'block';
+    } 
+
+    if (typingTimer) {
+        clearTimeout(typingTimer);
+    }
+
+    typingTimer = setTimeout(() => {
+        TYPING.style.display = 'none';
+        typingTimer = false;
+    }, 3000);
 })
 
 // Utils
